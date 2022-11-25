@@ -212,7 +212,7 @@ def train(hyp, opt, device):
             running_loss += loss.item()
             running_regression_loss += regression_loss.item()
             running_classification_loss += classification_loss.item()
-            num += images.shape[0]
+            num += 10
 
             avg_loss = running_loss / num
             avg_reg_loss = running_regression_loss / num
@@ -253,7 +253,7 @@ def test(loader, net, criterion, device):
         images = images.to(device).float() / 128.0
         boxes = boxes.to(device)
         labels = labels.to(device)
-        num += images.shape[0]
+        num += 10
         boxes = boxes.to(torch.float32)
 
         with torch.no_grad():
