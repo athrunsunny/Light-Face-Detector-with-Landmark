@@ -1,4 +1,4 @@
-#Light-Face-Detector-500K
+# Light-Face-Detector-500K
 
 
 ### Model size comparison
@@ -6,11 +6,8 @@
 
 Model|model file size（MB）
 ------|--------
-libfacedetection v1（caffe）| 2.58
-libfacedetection v2（caffe）| 3.34
 Official Retinaface-Mobilenet-0.25 (Mxnet) | 1.68
 version-slim| **1.04**
-version-RFB| **1.11** 
 facelite(our)| **0.5** 
 
 ## Generate VOC format training data set and training process
