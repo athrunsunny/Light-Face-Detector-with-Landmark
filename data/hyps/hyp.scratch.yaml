@@ -1,0 +1,50 @@
+
+lr0: 0.01  # initial learning rate (SGD=1E-2, Adam=1E-3)
+lrf: 0.01  # final OneCycleLR learning rate (lr0 * lrf)
+momentum: 0.937  # SGD momentum/Adam beta1
+weight_decay: 0.0005  # optimizer weight decay 5e-4
+warmup_epochs: 3.0  # warmup epochs (fractions ok)
+warmup_momentum: 0.8  # warmup initial momentum
+warmup_bias_lr: 0.1  # warmup initial bias lr
+box: 0.05  # box loss gain
+cls: 0.5  # cls loss gain
+cls_pw: 1.0  # cls BCELoss positive_weight
+obj: 1.0  # obj loss gain (scale with pixels)
+obj_pw: 1.0  # obj BCELoss positive_weight
+
+sigma: 0.5
+candidate_size: 200
+
+IMAGE_SIZE_DICT : {128: [128, 96],
+                   160: [160, 120],
+                   320: [320, 240],
+                   480: [480, 360],
+                   640: [640, 480],
+                   1280: [1280, 960]}
+
+FEATURE_MAP_DICT : {128: [[16, 8, 4, 2], [12, 6, 3, 2]],
+                    160: [[20, 10, 5, 3], [15, 8, 4, 2]],
+                    320: [[40, 20, 10, 5], [30, 15, 8, 4]],
+                    480: [[60, 30, 15, 8], [45, 23, 12, 6]],
+                    640: [[80, 40, 20, 10], [60, 30, 15, 8]],
+                    1280: [[160, 80, 40, 20], [120, 60, 30, 15]]}
+
+MIN_BOXES : [[10, 16, 24], [32, 48], [64, 96], [128, 192, 256]]
+
+SHRINKAGE : [[8.0, 16.0, 32.0, 64.0], [8.0, 16.0, 30.0, 60.0]]
+
+CHOISE : [0,1,2,3]
+
+IMAGE_MEAN : [127, 127, 127]
+
+IMAGE_STD : 128.0
+IOU_THRES : 0.3
+CENTER_VAR : 0.1
+SIZE_VAR : 0.2
+OVERLAP_THRES : 0.35
+
+
+
+
+
+
