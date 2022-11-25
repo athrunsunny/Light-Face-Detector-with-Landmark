@@ -1,0 +1,4 @@
+names:
+- face
+train: G:\dataset\wider_face_add_lm_10_10
+val: G:\dataset\wider_face_add_lm_10_10
