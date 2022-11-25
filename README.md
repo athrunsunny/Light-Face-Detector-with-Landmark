@@ -1,5 +1,6 @@
-# Light-Face-Detector-500K
+# Light-Face-Detector
 
+Model size under 500KB
 
 ### Model size comparison
 - Comparison of several open source lightweight face detection models:
