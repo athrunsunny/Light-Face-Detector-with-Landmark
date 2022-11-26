@@ -42,4 +42,4 @@ python export.py --weights face_lite.pth
 
 ## Pretrained model
 
-Baidu Cloud:https://pan.baidu.com/s/1L8Ut0QTTAPPPmV2qG6XhEg code:cz51
+Pretrained model: [Baidu cloud disk (extraction code: cz51)](https://pan.baidu.com/s/1L8Ut0QTTAPPPmV2qG6XhEg)
