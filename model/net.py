@@ -128,4 +128,4 @@ def create_net(model='Facelite', input=None, print_model=False):
 
 
 if __name__ == '__main__':
-    create_net(input=torch.randn(1, 3, 480, 6400), print_model=True)
+    create_net(input=torch.randn(1, 3, 480, 640), print_model=True)
