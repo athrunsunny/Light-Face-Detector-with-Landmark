@@ -11,7 +11,7 @@ cls: 0.5  # cls loss gain
 cls_pw: 1.0  # cls BCELoss positive_weight
 obj: 1.0  # obj loss gain (scale with pixels)
 obj_pw: 1.0  # obj BCELoss positive_weight
-
+neg_pos_ratio: 3
 sigma: 0.5
 candidate_size: 200
 
