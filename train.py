@@ -179,7 +179,7 @@ def train(hyp, opt, device):
     scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lf)  # plot_lr_scheduler(optimizer, scheduler, epochs)
 
     net.to(device)
-    criterion = MultiboxLoss(priors, neg_pos_ratio=3, center_variance=0.1, size_variance=0.2, device=device)
+    criterion = MultiboxLoss(priors, hyp=hyp, device=device)
 
     scheduler.last_epoch, last_epoch = -1, -1
     LOGGER.info(f"Start training from epoch {last_epoch + 1}.")
