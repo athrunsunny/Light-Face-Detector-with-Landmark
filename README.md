@@ -42,7 +42,7 @@ python detect.py --weights face_lite.pth
 python export.py --weights face_lite.pth 
 ```
 
-## Pretrained model
+## Pretrained model(det)
 
 Pretrained model: [Baidu cloud disk (extraction code: cz51)](https://pan.baidu.com/s/1L8Ut0QTTAPPPmV2qG6XhEg)
 
@@ -64,6 +64,6 @@ python landmark/detect.py --weights xxx.pth
 python landmark/export.py --weights xxx.pth 
 ```
 
-## Pretrained model
+## Pretrained model(lmk)
 
 Pretrained model: coming soon
