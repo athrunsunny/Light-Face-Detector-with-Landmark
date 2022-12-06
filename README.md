@@ -26,11 +26,17 @@ Download the wideface official website dataset or download the training set I pr
     widerface_landmark_gt/
       test/
       train/
+        label.txt
       val/
+        label.txt
     wider_face/
       WIDER_test/
       WIDER_train/
+        images/
+        label.txt
       WIDER_val/
+        images/
+        label.txt
 ```
 
 ## How to start
