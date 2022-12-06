@@ -11,12 +11,25 @@ Official Retinaface-Mobilenet-0.25 (Mxnet) | 1.68
 Ultra-Light-Fast-Generic-Face-Detector-1MB(version-slim)| **1.04**
 facelite(our)| **0.5** 
 
-## Generate VOC format training data set and training process
+### 1.Generate VOC format training data set and training process (for detect) 
 
 Download the wideface official website dataset or download the training set I provided and extract it into the ./data folder:
 
    The clean widerface data pack after filtering out the 10px*10px small face: [Baidu cloud disk (extraction code: cbiu)](https://pan.baidu.com/s/1MR0ZOKHUP_ArILjbAn03sw) 、[Google Drive](https://drive.google.com/open?id=1OBY-Pk5hkcVBX1dRBOeLI4e4OCvqJRnH )
 
+### 2.Download the wideface official website dataset (for landmark)  
+
+```Shell
+  data/
+    widerface_landmark_gt/
+      test/
+      train/
+      val/
+    wider_face/
+      WIDER_test/
+      WIDER_train/
+      WIDER_val/
+```
 
 ## How to start
 
