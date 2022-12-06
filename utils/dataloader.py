@@ -15,7 +15,7 @@ from torch.utils.data import Dataset, ConcatDataset, DataLoader
 from tqdm import tqdm
 
 from utils.box_utils import MatchPrior
-from utils.general import LOGGER, reconvert_np, colorstr, store_labels
+from utils.general import LOGGER, reconvert_np, colorstr, store_labels, letterbox
 from utils.torch_utils import torch_distributed_zero_first
 from utils.transforms import TrainAugmentation, TestTransform
 
@@ -501,7 +501,7 @@ def load_data(train_path, val_path, imgsz, priors, batch_size, opt, hyp, save_di
 
 
 class LoadImages:
-    def __init__(self, path, img_size=640, auto=True, transforms=None, vid_stride=1, oresize=False):
+    def __init__(self, path, img_size=640, auto=True, transforms=None, vid_stride=1, oresize=False,onnx=False):
         files = []
         for p in sorted(path) if isinstance(path, (list, tuple)) else [path]:
             p = str(Path(p).resolve())
@@ -527,6 +527,7 @@ class LoadImages:
         self.transforms = transforms  # optional
         self.vid_stride = vid_stride  # video frame-rate stride
         self.origin_size = oresize
+        self.onnx_inference = onnx
         if any(videos):
             self._new_video(videos[0])  # new video
         else:
@@ -572,6 +573,16 @@ class LoadImages:
         if self.transforms:
             im = self.transforms(im0)  # transforms
             resize = 1
+            return path, im, im0, self.cap, s
+        elif self.onnx_inference:
+            im = np.float32(im0)
+            # size_dict = {320: [240, 320]}
+            # if isinstance(self.img_size, int):
+            #     self.img_size = size_dict[self.img_size]
+            im = letterbox(im, self.img_size, auto=self.auto)[0]  # padded resize
+            im = im.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
+            im = np.ascontiguousarray(im)  # contiguous
+            return path, im, im0, self.cap, s, 1
         else:
             max_size = self.img_size
             im_shape = im0.shape
@@ -592,7 +603,7 @@ class LoadImages:
             im -= (104, 117, 123)
             im = im.transpose(2, 0, 1)
 
-        return path, im, im0, self.cap, s
+            return path, im, im0, self.cap, s, resize
 
     def _new_video(self, path):
         # Create a new video capture object
