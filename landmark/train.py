@@ -17,7 +17,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from model.landmark.net_lite import create_net
+from model.landmark.net_nano import create_net
 from utils.landmark.box_utils import PriorBox
 from utils.general import init_seeds, print_args, check_file, get_latest_run, check_yaml, increment_path, LOGGER, \
     colorstr, one_cycle, check_suffix, check_dataset
