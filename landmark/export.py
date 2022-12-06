@@ -18,7 +18,7 @@ if platform.system() != 'Windows':
 
 from utils.general import LOGGER, colorstr, file_size, print_args
 from utils.torch_utils import select_device
-from model.landmark.net_lite import create_net
+from model.landmark.net_nano import create_net
 
 
 def parse_opt():
