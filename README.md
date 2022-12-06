@@ -21,6 +21,8 @@ Download the wideface official website dataset or download the training set I pr
 
 ### 2.Download the wideface official website dataset (for landmark)  
 
+Copy label.txt under widerface_landmark_gt folder and paste it into wider_face
+
 ```Shell
   data/
     widerface_landmark_gt/
@@ -38,8 +40,6 @@ Download the wideface official website dataset or download the training set I pr
         images/
         label.txt
 ``` 
-
-Copy label.txt under widerface_landmark_gt folder and paste it into wider_face
 
 ## How to start
 
