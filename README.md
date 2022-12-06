@@ -39,6 +39,8 @@ Download the wideface official website dataset or download the training set I pr
         label.txt
 ``` 
 
+Copy label.txt under widerface_landmark_gt folder and paste it into wider_face
+
 ## How to start
 
 ### install requirements
