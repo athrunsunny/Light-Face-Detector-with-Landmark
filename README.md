@@ -37,7 +37,7 @@ Download the wideface official website dataset or download the training set I pr
       WIDER_val/
         images/
         label.txt
-```
+``` 
 
 ## How to start
 
