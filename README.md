@@ -25,6 +25,8 @@ Download the wideface official website dataset or download the training set I pr
 pip install -r requirements.txt
 ```
 
+## Detect model
+
 ### train
 ```Shell
 python train.py --batch-size 16 --epochs 300 --weights '' --optimizer SGD
@@ -43,3 +45,25 @@ python export.py --weights face_lite.pth
 ## Pretrained model
 
 Pretrained model: [Baidu cloud disk (extraction code: cz51)](https://pan.baidu.com/s/1L8Ut0QTTAPPPmV2qG6XhEg)
+
+
+## Landmark model
+
+### train
+```Shell
+python landmark/train.py --batch-size 16 --epochs 300 --weights '' --optimizer SGD
+```
+
+### detect
+```Shell
+python landmark/detect.py --weights xxx.pth 
+```
+
+### export
+```Shell
+python landmark/export.py --weights xxx.pth 
+```
+
+## Pretrained model
+
+Pretrained model: coming soon
