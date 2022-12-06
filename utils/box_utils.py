@@ -4,13 +4,13 @@ import torch
 
 
 class PriorBox(object):
-    def __init__(self, image_size=None, hpy=None):
+    def __init__(self, image_size=None, hyp=None):
         super(PriorBox, self).__init__()
         self.shrinkage_list = []
-        self.min_sizes = hpy['MIN_BOXES']
+        self.min_sizes = hyp['MIN_BOXES']
         self.image_size = image_size
-        self.feature_map_list = hpy['FEATURE_MAP_DICT'][image_size[0]]
-        self.choise_layer = hpy['CHOISE']
+        self.feature_map_list = hyp['FEATURE_MAP_DICT'][image_size[0]]
+        self.choise_layer = hyp['CHOISE']
         self.calculate_feature()
         self.calculate_shrinkage()
 
