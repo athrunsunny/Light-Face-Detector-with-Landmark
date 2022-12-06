@@ -576,9 +576,7 @@ class LoadImages:
             return path, im, im0, self.cap, s
         elif self.onnx_inference:
             im = np.float32(im0)
-            # size_dict = {320: [240, 320]}
-            # if isinstance(self.img_size, int):
-            #     self.img_size = size_dict[self.img_size]
+            im -= (104, 117, 123)
             im = letterbox(im, self.img_size, auto=self.auto)[0]  # padded resize
             im = im.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
             im = np.ascontiguousarray(im)  # contiguous
