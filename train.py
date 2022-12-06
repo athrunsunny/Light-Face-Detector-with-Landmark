@@ -156,7 +156,7 @@ def train(hyp, opt, device):
         net = torch.nn.DataParallel(net, device_ids=device)
 
     # Create priorbox
-    priorbox = PriorBox(image_size=(imgsz[0], imgsz[1]), hpy=hyp)
+    priorbox = PriorBox(image_size=(imgsz[0], imgsz[1]), hyp=hyp)
     with torch.no_grad():
         priors = priorbox.forward()
 
