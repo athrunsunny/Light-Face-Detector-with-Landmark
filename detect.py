@@ -123,7 +123,7 @@ def detect(
         net.eval()
 
     # Create priorbox
-    priorbox = PriorBox(image_size=imgsz, hpy=hyp)
+    priorbox = PriorBox(image_size=imgsz, hyp=hyp)
     with torch.no_grad():
         priors = priorbox.forward()
 
