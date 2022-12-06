@@ -506,3 +506,9 @@ def file_size(path):
         return sum(f.stat().st_size for f in path.glob('**/*') if f.is_file()) / mb
     else:
         return 0.0
+    
+
+def img2label_paths(img_paths):
+    # Define label paths as a function of image paths
+    sa, sb = os.sep + 'images' + os.sep, os.sep + 'labels' + os.sep  # /images/, /labels/ substrings
+    return [x.replace(sa, sb, 1).replace('.' + x.split('.')[-1], '.txt') for x in img_paths]
