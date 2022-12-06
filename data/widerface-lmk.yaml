@@ -1,0 +1,4 @@
+names:
+- face
+train: G:\DATASET\change_data(wider_face)
+val: G:\DATASET\change_data(wider_face)
