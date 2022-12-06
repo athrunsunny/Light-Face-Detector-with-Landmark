@@ -112,7 +112,8 @@ class Facenano(nn.Module):
         bbox_regressions = torch.cat([o.view(o.size(0), -1, 4) for o in loc], 1)
         classifications = torch.cat([o.view(o.size(0), -1, 2) for o in conf], 1)
         lmk_regressions = torch.cat([o.view(o.size(0), -1, 10) for o in lmk], 1)
-        return classifications, bbox_regressions, lmk_regressions
+        output = (bbox_regressions, classifications, lmk_regressions)
+        return output
 
     def load(self, model):
         self.load_state_dict(torch.load(model, map_location=lambda storage, loc: storage))
