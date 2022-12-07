@@ -26,6 +26,7 @@ from utils.landmark.loss import MultiBoxLoss
 from utils.torch_utils import select_device, smart_optimizer
 
 warnings.filterwarnings("ignore", category=Warning)
+torch.multiprocessing.set_sharing_strategy('file_system')
 
 LOCAL_RANK = int(os.getenv('LOCAL_RANK', -1))  # https://pytorch.org/docs/stable/elastic/run.html
 RANK = int(os.getenv('RANK', -1))
