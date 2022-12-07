@@ -170,6 +170,7 @@ def train(hyp, opt, device):
     data_dict = data_dict or check_dataset(data)  # check if None
     train_path, val_path = data_dict['train'], data_dict['val']
     train_loader, val_loader = load_data(train_path, val_path, imgsz, batch_size, opt, hyp, save_dir)
+    num_class = len(data_dict['names']) + 1
 
     # Optimizer
     nbs = 64  # nominal batch size
@@ -185,7 +186,7 @@ def train(hyp, opt, device):
     scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lf)  # plot_lr_scheduler(optimizer, scheduler, epochs)
 
     net.to(device)
-    criterion = MultiBoxLoss(2, hyp=hyp, device=device)
+    criterion = MultiBoxLoss(num_class, hyp=hyp, device=device)
     start_epoch = 0
     min_loss = [10000]
     scheduler.last_epoch, last_epoch = -1, -1
