@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 import torch
 import yaml
+import torch.nn.functional as F
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[1]  # root directory
@@ -16,7 +17,8 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from model.landmark.net_nano import create_net
 from utils.dataloader import LoadImages
-from utils.general import colorstr, LOGGER, check_yaml, print_args, increment_path, Profile
+from utils.general import colorstr, LOGGER, check_yaml, print_args, increment_path, Profile, scale_boxes, \
+    scale_coords_landmarks
 from utils.landmark.box_utils import PriorBox, decode_landm, decode, py_cpu_nms
 
 
@@ -25,9 +27,9 @@ def parse_opt():
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / '', help='model path(s)')
     parser.add_argument('--source', type=str, default=ROOT / 'imgs', help='file/dir/URL/glob, 0 for webcam')
     parser.add_argument('--hyp', type=str, default=ROOT / 'data/hyps/hyp.scratch-lmk.yaml', help='hyperparameters path')
-    parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=300,
+    parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=320,
                         help='inference size w,h')
-    parser.add_argument('--conf-thres', type=float, default=0.6, help='confidence threshold')
+    parser.add_argument('--conf-thres', type=float, default=0.02, help='confidence threshold')
     parser.add_argument('--max-det', type=int, default=1500, help='maximum detections per image')
     parser.add_argument('--device', default='cpu', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--view-img', action='store_true', help='show results')
@@ -35,7 +37,7 @@ def parse_opt():
     parser.add_argument('--project', default=ROOT / 'runs/detect-lmk', help='save results to project/name')
     parser.add_argument('--name', default='exp', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
-    parser.add_argument('--origin_size', default=True, type=str, help='Whether use origin image size to evaluate')
+    parser.add_argument('--origin_size', default=False, type=str, help='Whether use origin image size to evaluate')
     parser.add_argument('--top_k', default=5000, type=int, help='top_k')
     parser.add_argument('--nms_threshold', default=0.4, type=float, help='nms_threshold')
     parser.add_argument('--vis_thres', default=0.6, type=float, help='visualization_threshold')
@@ -49,7 +51,7 @@ def postprocess(loc, conf, landms, size, resize, top_k=-1, keep_top_k=-1, nms_th
     height, width = size
     scale = torch.Tensor([width, height, width, height])
     scale = scale.to(device)
-
+    conf = F.softmax(conf, dim=2)
     priorbox = PriorBox(image_size=(height, width), hyp=hyp)
     priors = priorbox.forward()
     priors = priors.to(device)
@@ -97,7 +99,7 @@ def detect(
         source=ROOT / 'data/images',  # file/dir/URL/glob, 0 for webcam
         hyp=ROOT / 'data/hyps/hyp.scratch-low.yaml',
         imgsz=320,  # inference size
-        conf_thres=0.25,  # confidence threshold
+        conf_thres=0.05,  # confidence threshold
         max_det=1500,  # maximum detections per image
         device='cpu',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
         view_img=False,  # show results
@@ -141,7 +143,7 @@ def detect(
 
     LOGGER.info(colorstr('image size: ') + f'{imgsz}')
 
-    dataset = LoadImages(source, img_size=imgsz, oresize=origin_size, onnx=True, auto=False)
+    dataset = LoadImages(source, img_size=imgsz, oresize=origin_size, onnx=onnx_model, auto=False)
     total = 0
     dt = (Profile(), Profile(), Profile())
     for path, im, im0s, vid_cap, s, resize in dataset:
@@ -169,17 +171,23 @@ def detect(
         with dt[2]:
             dets = postprocess(boxes, scores, landmarks, images.shape[2:], resize, top_k=top_k, keep_top_k=max_det // 2,
                                nms_threshold=nms_threshold, conf_thres=conf_thres, hyp=hyp)
+            if onnx_model:
+                dets = torch.as_tensor(dets)
+                dets[:, :4] = scale_boxes(images.shape[2:], dets[:, :4], im0.shape).round()
+                dets[:, 5:15] = scale_coords_landmarks(images.shape[2:], dets[:, 5:15], im0.shape).round()
+                dets = dets.numpy()
         LOGGER.info(f"{s}{'' if dets.shape[0] else '(no detections), '}{dt[1].dt * 1E3:.1f}ms")
-        total += dets.shape[0]
+        count_face = 0
         for b in dets:
             if b[4] < vis_thres:
                 continue
+            count_face += 1
             probs = "{:.4f}".format(b[4])
             b = list(map(int, b))
             cv2.rectangle(im0s, (b[0], b[1]), (b[2], b[3]), (0, 0, 255), thickness=2, lineType=cv2.LINE_AA)
             cx = b[0]
             cy = b[1] + 12
-            cv2.putText(im0s, probs, (cx, cy), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1)
+            cv2.putText(im0s, probs, (cx, cy), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255))
 
             # lmks
             cv2.circle(im0s, (b[5], b[6]), 1, (0, 0, 255), 4)
@@ -188,11 +196,12 @@ def detect(
             cv2.circle(im0s, (b[11], b[12]), 1, (0, 255, 0), 4)
             cv2.circle(im0s, (b[13], b[14]), 1, (255, 0, 0), 4)
 
-        cv2.imwrite(save_path, im0)
+        cv2.imwrite(save_path, im0s)
         if view_img:
-            cv2.imshow('result', im0)
+            cv2.imshow('result', im0s)
             cv2.waitKey(0)
-        LOGGER.info(f"Found {dets.shape[0]} faces. The output image is {save_path}")
+        total += count_face
+        LOGGER.info(f"Found {count_face} faces. The output image is {save_path}")
     LOGGER.info(f"Total face {total}")
 
 
