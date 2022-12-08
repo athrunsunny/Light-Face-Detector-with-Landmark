@@ -95,9 +95,9 @@ def postprocess(loc, conf, landms, size, resize, top_k=-1, keep_top_k=-1, nms_th
 
 
 def detect(
-        weights=ROOT / 'face_lite.pth',  # model.pt path(s)
+        weights=ROOT / '',  # model.pt path(s)
         source=ROOT / 'data/images',  # file/dir/URL/glob, 0 for webcam
-        hyp=ROOT / 'data/hyps/hyp.scratch-low.yaml',
+        hyp=ROOT / 'data/hyps/hyp.scratch-lmk.yaml',
         imgsz=320,  # inference size
         conf_thres=0.05,  # confidence threshold
         max_det=1500,  # maximum detections per image
