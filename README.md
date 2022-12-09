@@ -89,4 +89,4 @@ python landmark/export.py --weights xxx.pth
 
 ## Pretrained model(lmk)
 
-Pretrained model: coming soon
+Pretrained model: [Baidu cloud disk (extraction code: qjdh)](https://pan.baidu.com/s/1eFuupOYpIwXIYZPpY4mu7w)
